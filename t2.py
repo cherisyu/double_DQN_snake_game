@@ -102,10 +102,24 @@ class game:
 
         # 增加蛇的长度,同时也实现了蛇的移动
         self.snakeSegments.insert(0,list(self.snakePosition))
-
+        
+        #判断此时蛇头与树莓之间的距离，如果缩小就给予正奖励，否则负奖励
+        dis1=np.sqrt(np.square(self.snakePosition[0]-self.raspberryPosition[0])+np.square(self.snakePosition[1]-self.raspberryPosition[1]))
+        dis2=np.sqrt(np.square(temp[0]-self.raspberryPosition[0])+np.square(temp[1]-self.raspberryPosition[1]))
+        if dis2>dis1:
+            reward=1
+            self.flag[0]=1
+            self.flag[1]=0
+            self.flag[2]=0
+        elif dis2<dis1:
+            reward=-1
+            self.flag[0]=1
+            self.flag[1]=0
+            self.flag[2]=0
         # 判断是否吃掉了树莓
         if self.snakePosition[0] == self.raspberryPosition[0] and self.snakePosition[1] == self.raspberryPosition[1]:
             self.raspberrySpawned = 0
+            reward = 10
             self.flag[0]=0
             self.flag[1]=1
             self.flag[2]=0
@@ -127,19 +141,7 @@ class game:
                     break
             self.raspberrySpawned = 1
 
-        #判断此时蛇头与树莓之间的距离，如果缩小就给予正奖励，否则负奖励
-        dis1=np.sqrt(np.square(self.snakePosition[0]-self.raspberryPosition[0])+np.square(self.snakePosition[1]-self.raspberryPosition[1]))
-        dis2=np.sqrt(np.square(temp[0]-self.raspberryPosition[0])+np.square(temp[1]-self.raspberryPosition[1]))
-        if dis2>dis1:
-            reward=1
-            self.flag[0]=1
-            self.flag[1]=0
-            self.flag[2]=0
-        elif dis2<dis1:
-            reward=-1
-            self.flag[0]=1
-            self.flag[1]=0
-            self.flag[2]=0
+        
 
         #绘制pygame的显示层
         self.playSurface.fill(blackColour)
